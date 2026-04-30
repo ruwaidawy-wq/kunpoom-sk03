@@ -159,22 +159,20 @@ export default function ApplicationForm() {
             ]}
             onChange={handleChange}
           />
-          <Select
-            label="ประเภทเด็กที่มีความต้องการพิเศษ"
-            name="disabilityType"
-            options={[
-              { l: "การมองเห็น", v: "d1" },
-              { l: "การได้ยิน", v: "d2" },
-              { l: "สติปัญญา", v: "d3" },
-              { l: "ร่างกาย", v: "d4" },
-              { l: "ปัญหาการเรียนรู้(LD)", v: "d5" },
-              { l: "การพูดและภาษา", v: "d6" },
-              { l: "พฤติกรรมและอารมณ์", v: "d7" },
-              { l: "ออทิสติก", v: "d8" },
-              { l: "พิการซ้อน", v: "d9" },
-            ]}
-            onChange={handleChange}
-          />
+         <Select
+  label="ประเภทความพิการ"
+  name="disabilityType"
+  value={formData.disabilityType} // เพิ่มบรรทัดนี้ครับ
+  options={[
+    { l: "ออทิสติก", v: "d8" },
+    { l: "บกพร่องทางสติปัญญา", v: "d3" },
+    { l: "บกพร่องทางร่างกาย/สุขภาพ", v: "d4" },
+    { l: "ทางการมองเห็น", v: "d1" },
+    { l: "ทางการได้ยิน/สื่อความหมาย", v: "d2" },
+    { l: "พิการซ้อน", v: "d9" },
+  ]}
+  onChange={handleChange}
+/>
 
           <h4>1.1 ข้อมูลเด็ก</h4>
           <Row>
@@ -744,13 +742,15 @@ const Input = ({ label, ...props }) => (
     <input {...props} style={inputS} />
   </div>
 );
-const Select = ({ label, name, options, onChange }) => (
-  <div style={{ flex: 1, minWidth: "180px", marginBottom: "10px" }}>
-    <label style={{ fontSize: "13px", color: "#666" }}>{label}</label>
-    <select name={name} onChange={onChange} style={inputS}>
-      {options.map((o) => (
-        <option key={o.v || o} value={o.v || o}>
-          {o.l || o}
+const Select = ({ label, name, options, onChange, value }) => ( // เพิ่ม value ตรงนี้
+  <div style={{ flex: 1, minWidth: "200px" }}>
+    <label style={{ fontSize: "13px", color: "#444", fontWeight: "bold" }}>
+      {label}
+    </label>
+    <select name={name} onChange={onChange} value={value} style={inputStyle}> {/* เพิ่ม value={value} ตรงนี้ */}
+      {options.map((opt) => (
+        <option key={opt.v || opt} value={opt.v || opt}>
+          {opt.l || opt}
         </option>
       ))}
     </select>
