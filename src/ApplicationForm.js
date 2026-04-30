@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // ⚠️ อย่าลืมแก้ URL ตรงนี้ให้เป็นของคุณ (Deploy แบบ Anyone)
-const scriptUrl = "ใส่_URL_ที่ได้จากการ_Deploy_ตรงนี้";
+const scriptUrl = "https://script.google.com/macros/s/AKfycbxKtzjYWSkRVG47df9DEorwj3vXkpSIYQN_mbRYmYYr9es6pJ6VAr1YGJLmEcnfKIs7/exec";
 
 export default function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
