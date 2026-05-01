@@ -40,7 +40,10 @@ export default function ApplicationForm() {
     m_tel: "",
     m_mobile: "",
     maritalStatus: "s1",
-    g_type: "g1",
+    housingStatus: "a1", // ค่าเริ่มต้น: อยู่กับบิดามารดา
+  g_type: "g1",        // ค่าเริ่มต้นผู้ปกครอง: ปู่ย่าตายาย
+  g_relation: "",      // ระบุความสัมพันธ์อื่นๆ
+  
     g_name: "",
     g_surname: "",
     g_id: "",
@@ -775,4 +778,33 @@ const btnS = {
   fontSize: "18px",
   fontWeight: "bold",
   cursor: "pointer",
+};
+// วางไว้ล่างสุดของไฟล์ ApplicationForm.js
+const inputStyle = { 
+  width: "100%", 
+  padding: "8px", 
+  borderRadius: "4px", 
+  border: "1px solid #ccc",
+  marginTop: "5px"
+};
+
+const btnStyle = { 
+  width: "100%", 
+  padding: "15px", 
+  background: "#800000", 
+  color: "#fff", 
+  border: "none", 
+  borderRadius: "8px", 
+  cursor: "pointer",
+  fontSize: "16px",
+  fontWeight: "bold"
+};
+
+const textStyle = { 
+  width: "100%", 
+  height: "80px", 
+  padding: "8px", 
+  borderRadius: "4px", 
+  border: "1px solid #ccc",
+  marginTop: "10px" 
 };
