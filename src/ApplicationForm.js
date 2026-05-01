@@ -90,6 +90,8 @@ export default function ApplicationForm() {
     officer_name: "",
     officer_tel: "",
     home_map: "",
+    housingStatus: "a1", // เริ่มต้นที่ บิดา-มารดา
+  g_type: "",
   });
 
   const handleChange = (e) =>
