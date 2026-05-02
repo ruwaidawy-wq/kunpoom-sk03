@@ -273,85 +273,123 @@ options={[
             onChange={handleChange}
           ></textarea>
 
-{formData.housingStatus === "a4" && (
-            <div
-              style={{
-                marginTop: "20px",
-                padding: "20px",
-                border: "1px dashed #2196F3",
-                borderRadius: "8px",
-                backgroundColor: "#f0f7ff",
-              }}
-            >
-              <h4 style={{ color: "#1976d2", marginTop: 0 }}>
-                1.6 ข้อมูลผู้ปกครอง (กรณีไม่ได้อยู่กับบิดามารดา)
-              </h4>
-              <Select
-                label="อาศัยอยู่กับผู้ปกครองคือ"
-                name="g_type"
-                value={formData.g_type}
-                options={[
-                  { l: "ปู่ ย่า ตา ยาย", v: "g1" },
-                  { l: "อื่นๆ", v: "g2" },
-                ]}
-                onChange={handleChange}
-              />
-
-              {formData.g_type === "g2" && (
-                <Input
-                  label="ระบุความสัมพันธ์ (เช่น พี่สาว, ลุง, น้า)"
-                  name="g_relation"
-                  value={formData.g_relation}
-                  onChange={handleChange}
-                />
-              )}
-
-              <Row>
-                <Input label="ชื่อผู้ปกครอง" name="g_name" onChange={handleChange} />
-                <Input label="นามสกุล" name="g_surname" onChange={handleChange} />
-                <Input label="รหัสประจำตัวประชาชน" name="g_id" onChange={handleChange} />
-              </Row>
-              <Row>
-                <Input label="อาชีพ" name="g_job" onChange={handleChange} />
-                <Input label="รายได้เดือนละ" name="g_income" onChange={handleChange} />
-                <Input label="โทรศัพท์" name="g_tel" onChange={handleChange} />
-              </Row>
-            </div>
-          )}
-        </Section>
-
-        <hr style={{ margin: "30px 0", border: "0.5px solid #eee" }} />
-
-        <Section title="ลงลายมือชื่อ">
-          <div style={{ marginBottom: "15px" }}>
-            {formData.housingStatus === "a4" ? (
-              <Input
-                label="ชื่อ-สกุล ผู้ปกครองตัวบรรจง (คนเดียวกับด้านบน)"
-                name="parent_full_name"
-                value={formData.parent_full_name}
-                onChange={handleChange}
-                placeholder="ระบุชื่อเพื่อใช้ในช่องลายเซ็น"
-              />
-            ) : (
-              <div
-                style={{
-                  padding: "15px",
-                  backgroundColor: "#e8f5e9",
-                  borderRadius: "8px",
-                  color: "#2e7d32",
-                }}
-              >
-                <strong>✓ ระบบลงนามอัตโนมัติ:</strong> เนื่องจากอาศัยอยู่กับบิดา/มารดา เอกสารจะใช้ชื่อบิดาหรือมารดาเป็นผู้รับรองโดยอัตโนมัติ
-              </div>
-            )}
-          </div>
-
+<h4>1.4 ข้อมูลบิดา</h4>
+          <Select
+            label="สถานะบิดา"
+            name="f_status"
+            options={["มีชีวิตอยู่", "ถึงแก่กรรม"]}
+            onChange={handleChange}
+          />
           <Row>
-            <Input label="วันที่" name="sign_d" placeholder="เช่น 01" onChange={handleChange} />
-            <Input label="เดือน" name="sign_m" placeholder="เช่น มกราคม" onChange={handleChange} />
-            <Input label="ปี พ.ศ." name="sign_y" placeholder="เช่น 2569" onChange={handleChange} />
+            <Input label="ชื่อบิดา" name="f_name" onChange={handleChange} />
+            <Input label="นามสกุล" name="f_surname" onChange={handleChange} />
+            <Input
+              label="รหัสประจำตัวประชาชน"
+              name="f_id"
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Input label="อาชีพ" name="f_job" onChange={handleChange} />
+            <Input
+              label="รายได้เดือนละ"
+              name="f_income"
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Input label="โทรศัพท์" name="f_tel" onChange={handleChange} />
+          </Row>
+
+          <h4>1.5 ข้อมูลมารดา</h4>
+          <Select
+            label="สถานะมารดา"
+            name="m_status"
+            options={["มีชีวิตอยู่", "ถึงแก่กรรม"]}
+            onChange={handleChange}
+          />
+          <Row>
+            <Input label="ชื่อมารดา" name="m_name" onChange={handleChange} />
+            <Input label="นามสกุล" name="m_surname" onChange={handleChange} />
+            <Input
+              label="รหัสประจำตัวประชาชน"
+              name="m_id"
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Input label="อาชีพ" name="m_job" onChange={handleChange} />
+            <Input
+              label="รายได้เดือนละ"
+              name="m_income"
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Input label="โทรศัพท์" name="m_tel" onChange={handleChange} />
+          </Row>
+
+          <Select
+            label="สถานภาพ บิดาและมารดาขณะนี้"
+            name="maritalStatus"
+            options={[
+              { l: "สมรส", v: "s1" },
+              { l: "อยู่ด้วยกันแต่ไม่จดทะเบียน", v: "s2" },
+              { l: "แยกกันอยู่", v: "s3" },
+              { l: "หย่าร้าง", v: "s4" },
+            ]}
+            onChange={handleChange}
+          />
+
+          <h4>1.6 ข้อมูลผู้ปกครอง (กรณีไม่ได้อยู่กับบิดามารดา)</h4>
+          <Select
+            label="อาศัยอยู่กับผู้ปกครองคือ"
+            name="g_type"
+            options={[
+              { l: "-- ไม่ระบุ (อาศัยอยู่กับบิดามารดา) --", v: "" }, // เพิ่มบรรทัดนี้เข้าไปเป็นตัวเลือกแรก
+              { l: "ปู่ ย่า ตา ยาย", v: "g1" },
+              { l: "อื่นๆ", v: "g2" },
+            ]}
+            onChange={handleChange}
+          />
+          <Row>
+            <Input
+              label="ชื่อผู้ปกครอง"
+              name="g_name"
+              onChange={handleChange}
+            />
+            <Input label="นามสกุล" name="g_surname" onChange={handleChange} />
+            <Input
+              label="รหัสประจำตัวประชาชน"
+              name="g_id"
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Input label="อาชีพ" name="g_job" onChange={handleChange} />
+            <Input
+              label="รายได้เดือนละ"
+              name="g_income"
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Input label="โทรศัพท์" name="g_tel" onChange={handleChange} />
+          </Row>
+
+          <h4>ลงลายมือชื่อผู้ปกครอง</h4>
+          <Input
+            label="ชื่อ-สกุล ผู้ปกครองตัวบรรจง"
+            name="parent_full_name"
+            onChange={handleChange}
+          />
+          <Row>
+            <Input label="วันที่" name="sign_d" onChange={handleChange} />
+            <Input label="เดือน" name="sign_m" onChange={handleChange} />
+            <Input label="ปี พ.ศ." name="sign_y" onChange={handleChange} />
           </Row>
         </Section>
+
         <Section title="ส่วนที่ 2: แบบสอบข้อเท็จจริงเด็กที่มีความต้องการพิเศษ">
           <p>
             <b>1. คุณสมบัติของผู้ขอรับทุนการศึกษา</b>
