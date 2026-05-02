@@ -341,54 +341,113 @@ options={[
             onChange={handleChange}
           />
 
-          <h4>1.6 ข้อมูลผู้ปกครอง (กรณีไม่ได้อยู่กับบิดามารดา)</h4>
-          <Select
-            label="อาศัยอยู่กับผู้ปกครองคือ"
-            name="g_type"
-            options={[
-              { l: "-- ไม่ระบุ (อาศัยอยู่กับบิดามารดา) --", v: "" }, // เพิ่มบรรทัดนี้เข้าไปเป็นตัวเลือกแรก
-              { l: "ปู่ ย่า ตา ยาย", v: "g1" },
-              { l: "อื่นๆ", v: "g2" },
-            ]}
-            onChange={handleChange}
-          />
-          <Row>
-            <Input
-              label="ชื่อผู้ปกครอง"
-              name="g_name"
-              onChange={handleChange}
-            />
-            <Input label="นามสกุล" name="g_surname" onChange={handleChange} />
-            <Input
-              label="รหัสประจำตัวประชาชน"
-              name="g_id"
-              onChange={handleChange}
-            />
-          </Row>
-          <Row>
-            <Input label="อาชีพ" name="g_job" onChange={handleChange} />
-            <Input
-              label="รายได้เดือนละ"
-              name="g_income"
-              onChange={handleChange}
-            />
-          </Row>
-          <Row>
-            <Input label="โทรศัพท์" name="g_tel" onChange={handleChange} />
-          </Row>
+        {/* ----- เริ่มต้นส่วนที่ 1.6 ที่แก้ไขใหม่ (วางทับของเดิม) ----- */}
+          <h4 style={{ color: "#1976d2", marginTop: 0 }}>
+            1.6 ปัจจุบันอาศัยอยู่กับ
+          </h4>
+          
+          <div style={{ marginBottom: "20px", marginLeft: "10px" }}>
+            <label style={{ display: "block", marginBottom: "10px", cursor: "pointer" }}>
+              <input type="radio" name="livingWith" value="h1" checked={formData.livingWith === "h1"} onChange={handleChange} /> 
+              <span style={{ marginLeft: "8px" }}>บิดา-มารดา</span>
+            </label>
+            <label style={{ display: "block", marginBottom: "10px", cursor: "pointer" }}>
+              <input type="radio" name="livingWith" value="h2" checked={formData.livingWith === "h2"} onChange={handleChange} /> 
+              <span style={{ marginLeft: "8px" }}>บิดา</span>
+            </label>
+            <label style={{ display: "block", marginBottom: "10px", cursor: "pointer" }}>
+              <input type="radio" name="livingWith" value="h3" checked={formData.livingWith === "h3"} onChange={handleChange} /> 
+              <span style={{ marginLeft: "8px" }}>มารดา</span>
+            </label>
+            <label style={{ display: "block", marginBottom: "10px", cursor: "pointer" }}>
+              <input type="radio" name="livingWith" value="h4" checked={formData.livingWith === "h4"} onChange={handleChange} /> 
+              <span style={{ marginLeft: "8px" }}>ผู้ปกครองที่ไม่ใช่บิดา/มารดา</span>
+            </label>
+          </div>
 
-          <h4>ลงลายมือชื่อผู้ปกครอง</h4>
-          <Input
-            label="ชื่อ-สกุล ผู้ปกครองตัวบรรจง"
-            name="parent_full_name"
-            onChange={handleChange}
-          />
+          {/* กล่องนี้จะกางลงมาให้กรอก ก็ต่อเมื่อติ๊กเลือกข้อ 4 "ผู้ปกครองที่ไม่ใช่บิดา/มารดา" */}
+          {formData.livingWith === "h4" && (
+            <div
+              style={{
+                marginTop: "10px",
+                padding: "20px",
+                border: "1px dashed #2196F3",
+                borderRadius: "8px",
+                backgroundColor: "#f0f7ff",
+              }}
+            >
+              <h5 style={{ marginTop: 0 }}>ระบุผู้ปกครอง:</h5>
+              <div style={{ marginBottom: "15px" }}>
+                <label style={{ marginRight: "20px", cursor: "pointer" }}>
+                  <input type="radio" name="g_type" value="g1" checked={formData.g_type === "g1"} onChange={handleChange} />
+                  <span style={{ marginLeft: "8px" }}>ปู่ ย่า ตา ยาย</span>
+                </label>
+                <label style={{ cursor: "pointer" }}>
+                  <input type="radio" name="g_type" value="g2" checked={formData.g_type === "g2"} onChange={handleChange} />
+                  <span style={{ marginLeft: "8px" }}>อื่นๆ</span>
+                </label>
+              </div>
+
+              {/* ช่องให้พิมพ์ความสัมพันธ์ จะโชว์เมื่อเลือก "อื่นๆ" */}
+              {formData.g_type === "g2" && (
+                <div style={{ marginBottom: "15px" }}>
+                  <Input
+                    label="ระบุความสัมพันธ์ (เช่น พี่สาว, ลุง, น้า)"
+                    name="g_relation"
+                    value={formData.g_relation}
+                    onChange={handleChange}
+                  />
+                </div>
+              )}
+
+              <Row>
+                <Input label="ชื่อผู้ปกครอง" name="g_name" onChange={handleChange} />
+                <Input label="นามสกุล" name="g_surname" onChange={handleChange} />
+                <Input label="รหัส ปชช." name="g_id" onChange={handleChange} />
+              </Row>
+              <Row>
+                <Input label="อาชีพ" name="g_job" onChange={handleChange} />
+                <Input label="รายได้/เดือน" name="g_income" onChange={handleChange} />
+                <Input label="โทรศัพท์" name="g_tel" onChange={handleChange} />
+              </Row>
+            </div>
+          )}
+        </Section>
+
+        {/* แยกส่วนลายเซ็นออกมาให้ดูเป็นระเบียบ */}
+        <hr style={{ margin: "30px 0", border: "0.5px solid #eee" }} />
+
+        <Section title="ลงลายมือชื่อผู้ปกครอง">
+          <div style={{ marginBottom: "15px" }}>
+            {formData.livingWith === "h4" ? (
+              <Input
+                label="ชื่อ-สกุล ผู้ปกครองตัวบรรจง"
+                name="parent_full_name"
+                value={formData.parent_full_name}
+                onChange={handleChange}
+                placeholder="ระบุชื่อเพื่อใช้ในช่องลายเซ็น"
+              />
+            ) : (
+              <div
+                style={{
+                  padding: "15px",
+                  backgroundColor: "#e8f5e9",
+                  borderRadius: "8px",
+                  color: "#2e7d32",
+                }}
+              >
+                <strong>✓ ระบบลงนามอัตโนมัติ:</strong> เนื่องจากอาศัยอยู่กับบิดา/มารดา เอกสารจะดึงชื่อบิดาหรือมารดาไปใส่ในช่องผู้รับรองให้อัตโนมัติ (ไม่ต้องพิมพ์ซ้ำ)
+              </div>
+            )}
+          </div>
+
           <Row>
-            <Input label="วันที่" name="sign_d" onChange={handleChange} />
-            <Input label="เดือน" name="sign_m" onChange={handleChange} />
-            <Input label="ปี พ.ศ." name="sign_y" onChange={handleChange} />
+            <Input label="วันที่" name="sign_d" placeholder="เช่น 12" onChange={handleChange} />
+            <Input label="เดือน" name="sign_m" placeholder="เช่น มิถุนายน" onChange={handleChange} />
+            <Input label="ปี พ.ศ." name="sign_y" placeholder="เช่น 2569" onChange={handleChange} />
           </Row>
         </Section>
+        {/* ----- จบส่วนที่แก้ไข ----- */}
 
         <Section title="ส่วนที่ 2: แบบสอบข้อเท็จจริงเด็กที่มีความต้องการพิเศษ">
           <p>
