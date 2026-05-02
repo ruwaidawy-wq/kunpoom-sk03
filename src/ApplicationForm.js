@@ -6,8 +6,11 @@ const scriptUrl = "https://script.google.com/macros/s/AKfycbxKtzjYWSkRVG47df9DEo
 export default function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
+ const [formData, setFormData] = useState({
+    // --- ส่วนรับอีเมล ---
     applicantEmail: "",
+
+    // --- ส่วนที่ 1: ข้อมูลเด็ก ---
     eduCategory: "e1",
     disabilityType: "d8",
     pre: "เด็กชาย",
@@ -20,9 +23,13 @@ export default function ApplicationForm() {
     age: "",
     school_name: "",
     school_level: "",
-    housingStatus: "a1",
+
+    // --- ที่อยู่ ---
     address_now: "",
     address_reg: "",
+    housingStatus: "a1", // สำหรับข้อ 1.3 (a1-a5)
+
+    // --- ข้อมูลบิดา-มารดา ---
     f_status: "มีชีวิตอยู่",
     f_name: "",
     f_surname: "",
@@ -30,7 +37,7 @@ export default function ApplicationForm() {
     f_job: "",
     f_income: "",
     f_tel: "",
-    f_mobile: "",
+    f_mobile: "", // เก็บไว้เผื่อฟอร์มใน React ยังมีช่องนี้อยู่
     m_status: "มีชีวิตอยู่",
     m_name: "",
     m_surname: "",
@@ -38,62 +45,74 @@ export default function ApplicationForm() {
     m_job: "",
     m_income: "",
     m_tel: "",
-    m_mobile: "",
-    maritalStatus: "s1",
-    housingStatus: "a1", // ค่าเริ่มต้น: อยู่กับบิดามารดา
-  g_type: "g1",        // ค่าเริ่มต้นผู้ปกครอง: ปู่ย่าตายาย
-  g_relation: "",      // ระบุความสัมพันธ์อื่นๆ
-  
+    m_mobile: "", // เก็บไว้เผื่อฟอร์มใน React ยังมีช่องนี้อยู่
+    maritalStatus: "s1", // สำหรับ s1-s4 ตาม Doc
+
+    // --- ข้อมูลผู้ปกครอง (ข้อ 1.6) ---
+    livingWith: "l1",    // สำหรับข้อ 1.6 (l1-l4)
+    g_type: "g1",        // g1-g2
+    g_relation: "",
     g_name: "",
     g_surname: "",
     g_id: "",
     g_job: "",
     g_income: "",
     g_tel: "",
-    g_mobile: "",
-    parent_full_name: "",
-    sign_d: "",
-    sign_m: "",
+
+    // --- ลงนามส่วนที่ 1 ---
+    signer_name: "",     // ตรงกับ {{signer_name}} ใน Doc
+    sign_d: "", 
+    sign_m: "", 
     sign_y: "",
-    quals: [],
-    docs: [],
+
+    // --- ส่วนที่ 2: เช็คบ็อกซ์ ---
+    quals: [], 
+    docs: [], 
     helps: [],
     help_detail: "",
+
+    // --- ภาระครอบครัวและสภาพแวดล้อม ---
     family_count: "0",
     debt_amount: "0",
     family_detail: "",
     living: "living2",
     env: "env2",
+
+    // --- ลงนามส่วนที่ 2 ---
     applicant_full_name: "",
     interviewer_full_name: "",
     interviewer_pos: "",
     interviewer_org: "",
-    int_d: "",
-    int_m: "",
+    int_d: "", 
+    int_m: "", 
     int_y: "",
-    // ส่วนที่ 3 (เว้นว่างไว้ได้ถ้าต้องการเขียนด้วยมือ)
+
+    // --- ส่วนที่ 3: ผู้รับรองคนที่ 1 (ชุมชน) ---
     cert1_name: "",
     cert1_surname: "",
     cert1_id: "",
     cert1_pos: "",
     cert1_tel: "",
     cert1_detail: "",
+
+    // --- ส่วนที่ 3: ผู้รับรองคนที่ 2 (สถานศึกษา) ---
     cert2_name: "",
     cert2_surname: "",
     cert2_id: "",
     cert2_pos: "",
     cert2_tel: "",
+
+    // --- ส่วนเจ้าหน้าที่ ---
     submit_d: "",
     submit_m: "",
     submit_y: "",
     submit_place: "",
     officer_name: "",
     officer_tel: "",
-    home_map: "",
-    housingStatus: "a1", // เริ่มต้นที่ บิดา-มารดา
-  g_type: "",
-  });
 
+    // --- แผนที่ ---
+    home_map: "",
+});
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
