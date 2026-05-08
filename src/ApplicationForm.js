@@ -293,7 +293,14 @@ options={[
             style={textS}
             onChange={handleChange}
           ></textarea>
-
+          <p>
+            <b>แผนที่บ้าน</b>
+          </p>
+          <Input
+            label="ลิงก์แผนที่ (Google Map)"
+            name="home_map"
+            onChange={handleChange}
+          />
 <h4>1.4 ข้อมูลบิดา</h4>
           <Select
             label="สถานะบิดา"
@@ -759,7 +766,7 @@ options={[
           </Row>
 
           <p>
-            <b>ส่วนของเจ้าหน้าที่รับสมัคร</b>
+            <b>ส่วนของเจ้าหน้าที่รับสมัคร(ไม่ต้องกรอกข้อมูล)</b>
           </p>
           <Row>
             <Input
@@ -788,14 +795,7 @@ options={[
             />
           </Row>
 
-          <p>
-            <b>แผนที่บ้าน</b>
-          </p>
-          <Input
-            label="ลิงก์แผนที่ (Google Map)"
-            name="home_map"
-            onChange={handleChange}
-          />
+
         </Section>
 
         <button type="submit" disabled={isSubmitting} style={btnS}>
