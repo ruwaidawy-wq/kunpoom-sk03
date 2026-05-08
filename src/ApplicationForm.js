@@ -9,7 +9,7 @@ export default function ApplicationForm() {
  const [formData, setFormData] = useState({
     // --- ส่วนรับอีเมล ---
     applicantEmail: "",
-
+teacher_tel: "",
     // --- ส่วนที่ 1: ข้อมูลเด็ก ---
     eduCategory: "e1",
     disabilityType: "d8",
@@ -173,14 +173,25 @@ const handleFileChange = (e) => {
       </h2>
 
       <form onSubmit={handleSubmit}>
-        <Section title="อีเมลสำหรับรับเอกสารยืนยัน (PDF)">
-          <Input
-            type="email"
-            name="applicantEmail"
-            placeholder="ระบุอีเมลครูหรือผู้รับผิดชอบ"
-            required
-            onChange={handleChange}
-          />
+<Section title="ข้อมูลผู้รับผิดชอบ (ครู)">
+          <Row>
+            <Input
+              type="email"
+              label="อีเมลสำหรับรับเอกสาร PDF"
+              name="applicantEmail"
+              placeholder="example@gmail.com"
+              required
+              onChange={handleChange}
+            />
+            <Input
+              type="tel"
+              label="เบอร์โทรติดต่อครูที่รับผิดชอบ"
+              name="teacher_tel"
+              placeholder="08X-XXXXXXX"
+              required
+              onChange={handleChange}
+            />
+          </Row>
         </Section>
 
         <Section title="ส่วนที่ 1: แบบประวัติของเด็กที่มีความต้องการพิเศษ">
