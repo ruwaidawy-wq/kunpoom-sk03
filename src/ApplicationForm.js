@@ -23,6 +23,7 @@ export default function ApplicationForm() {
     age: "",
     school_name: "",
     school_level: "",
+   student_photo: "",
 
     // --- ที่อยู่ ---
     address_now: "",
@@ -64,6 +65,7 @@ export default function ApplicationForm() {
     sign_d: "", 
     sign_m: "", 
     sign_y: "",
+   parent_full_name: "",
 
     // --- ส่วนที่ 2: เช็คบ็อกซ์ ---
     quals: [], 
@@ -123,7 +125,16 @@ export default function ApplicationForm() {
     else newArray = newArray.filter((item) => item !== value);
     setFormData({ ...formData, [name]: newArray });
   };
-
+const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setFormData({ ...formData, student_photo: reader.result }); // เก็บรูปในรูปแบบรหัส Base64
+        };
+        reader.readAsDataURL(file);
+    }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!window.confirm("ยืนยันการส่งข้อมูล?")) return;
@@ -246,7 +257,17 @@ options={[
               onChange={handleChange}
             />
           </Row>
-
+<Section title="รูปภาพนักเรียน">
+    <div style={{ marginBottom: "15px" }}>
+        <input type="file" accept="image/*" onChange={handleFileChange} style={inputS} />
+        {formData.student_photo && (
+            <div style={{ marginTop: "10px" }}>
+                <img src={formData.student_photo} alt="Preview" style={{ width: "120px", height: "150px", objectFit: "cover", borderRadius: "5px", border: "1px solid #ddd" }} />
+                <p style={{ fontSize: "12px", color: "#666" }}>ตัวอย่างรูปภาพ</p>
+            </div>
+        )}
+    </div>
+</Section>
           <h4>1.3 ที่อยู่ปัจจุบัน</h4>
           <Select
             label="ลักษณะที่อยู่"
@@ -833,7 +854,7 @@ const Select = ({ label, name, options, onChange, value }) => ( // เพิ่�
     <label style={{ fontSize: "13px", color: "#444", fontWeight: "bold" }}>
       {label}
     </label>
-    <select name={name} onChange={onChange} value={value} style={inputStyle}> {/* เพิ่ม value={value} ตรงนี้ */}
+    <select name={name} onChange={onChange} value={value} style={inputS}> {/* เพิ่ม value={value} ตรงนี้ */}
       {options.map((opt) => (
         <option key={opt.v || opt} value={opt.v || opt}>
           {opt.l || opt}
@@ -861,26 +882,6 @@ const btnS = {
   fontSize: "18px",
   fontWeight: "bold",
   cursor: "pointer",
-};
-// วางไว้ล่างสุดของไฟล์ ApplicationForm.js
-const inputStyle = { 
-  width: "100%", 
-  padding: "8px", 
-  borderRadius: "4px", 
-  border: "1px solid #ccc",
-  marginTop: "5px"
-};
-
-const btnStyle = { 
-  width: "100%", 
-  padding: "15px", 
-  background: "#800000", 
-  color: "#fff", 
-  border: "none", 
-  borderRadius: "8px", 
-  cursor: "pointer",
-  fontSize: "16px",
-  fontWeight: "bold"
 };
 
 const textStyle = { 
