@@ -742,7 +742,7 @@ options={[
           </p>
           <Row>
             <Input
-  label="ชื่อผู้รับรอง"
+  label="ชื่อผู้รับรอง(ระบุคำนำหน้า)"
   name="cert1_name"
   placeholder="เช่น นายสมชาย" // ใส่ตัวอย่างเพื่อให้เขากรอกคำนำหน้ามาด้วย
   onChange={handleChange}
@@ -769,7 +769,7 @@ options={[
           </p>
           <Row>
             <Input
-  label="ชื่อผู้รับรอง"
+  label="ชื่อผู้รับรอง(ระบุคำนำหน้า)"
   name="cert2_name"
   placeholder="เช่น นายสมชาย" // ใส่ตัวอย่างเพื่อให้เขากรอกคำนำหน้ามาด้วย
   onChange={handleChange}
