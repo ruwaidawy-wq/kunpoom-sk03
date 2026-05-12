@@ -450,7 +450,7 @@ options={[
               <Row>
                 <Input label="ชื่อผู้ปกครอง" name="g_name" onChange={handleChange} />
                 <Input label="นามสกุล" name="g_surname" onChange={handleChange} />
-                <Input label="รหัส ปชช." name="g_id" onChange={handleChange} />
+                <Input label="เลขบัตรประจำตัวประชาชน" name="g_id" onChange={handleChange} />
               </Row>
               <Row>
                 <Input label="อาชีพ" name="g_job" onChange={handleChange} />
@@ -736,7 +736,7 @@ options={[
           </Row>
         </Section>
 
-        <Section title="ส่วนที่ 3 และ ส่วนของเจ้าหน้าที่ (เว้นว่างได้ถ้าต้องการเขียนด้วยมือทีหลัง)">
+        <Section title="ส่วนที่ 3 และ ส่วนของเจ้าหน้าที่">
           <p>
             <b>1. หนังสือรับรองจากชุมชนหรือผู้ที่น่าเชื่อถือ</b>
           </p>
@@ -754,7 +754,7 @@ options={[
             />
           </Row>
           <Row>
-            <Input label="รหัส ปชช." name="cert1_id" onChange={handleChange} />
+            <Input label="เลขบัตรประจำตัวประชาชน" name="cert1_id" onChange={handleChange} />
             <Input label="ตำแหน่ง" name="cert1_pos" onChange={handleChange} />
             <Input label="โทรศัพท์" name="cert1_tel" onChange={handleChange} />
           </Row>
@@ -781,7 +781,7 @@ options={[
             />
           </Row>
           <Row>
-            <Input label="รหัส ปชช." name="cert2_id" onChange={handleChange} />
+            <Input label="เลขบัตรประจำตัวประชาชน" name="cert2_id" onChange={handleChange} />
             <Input label="ตำแหน่ง" name="cert2_pos" onChange={handleChange} />
             <Input label="โทรศัพท์" name="cert2_tel" onChange={handleChange} />
           </Row>
