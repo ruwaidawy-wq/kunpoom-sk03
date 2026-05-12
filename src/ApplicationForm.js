@@ -139,11 +139,19 @@ const handleFileChange = (e) => {
     e.preventDefault();
     if (!window.confirm("ยืนยันการส่งข้อมูล?")) return;
     setIsSubmitting(true);
-    try {
-      const res = await fetch(scriptUrl, {
-        method: "POST",
-        body: JSON.stringify({ action: "saveAndPrint", item: formData }),
-      });
+    const finalData = { ...formData };
+  
+  // รวมชื่อผู้รับรอง 1
+  finalData.cert1_full = `${formData.cert1_name} ${formData.cert1_surname}`.trim();
+  // รวมชื่อผู้รับรอง 2
+  finalData.cert2_full = `${formData.cert2_name} ${formData.cert2_surname}`.trim();
+  // รวมชื่อเจ้าหน้าที่
+  finalData.officer_full = formData.officer_name;
+try {
+    const res = await fetch(scriptUrl, {
+      method: "POST",
+      body: JSON.stringify({ action: "saveAndPrint", item: finalData }), // ส่ง finalData แทน
+    });
       const result = await res.json();
       if (result.status === "success") {
         alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!");
@@ -734,10 +742,11 @@ options={[
           </p>
           <Row>
             <Input
-              label="ชื่อผู้รับรอง"
-              name="cert1_name"
-              onChange={handleChange}
-            />
+  label="ชื่อผู้รับรอง"
+  name="cert1_name"
+  placeholder="เช่น นายสมชาย" // ใส่ตัวอย่างเพื่อให้เขากรอกคำนำหน้ามาด้วย
+  onChange={handleChange}
+/>
             <Input
               label="นามสกุล"
               name="cert1_surname"
@@ -760,10 +769,11 @@ options={[
           </p>
           <Row>
             <Input
-              label="ชื่อผู้รับรอง"
-              name="cert2_name"
-              onChange={handleChange}
-            />
+  label="ชื่อผู้รับรอง"
+  name="cert2_name"
+  placeholder="เช่น นายสมชาย" // ใส่ตัวอย่างเพื่อให้เขากรอกคำนำหน้ามาด้วย
+  onChange={handleChange}
+/>
             <Input
               label="นามสกุล"
               name="cert2_surname"
