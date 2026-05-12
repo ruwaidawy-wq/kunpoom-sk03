@@ -785,38 +785,6 @@ options={[
             <Input label="ตำแหน่ง" name="cert2_pos" onChange={handleChange} />
             <Input label="โทรศัพท์" name="cert2_tel" onChange={handleChange} />
           </Row>
-
-          <p>
-            <b>ส่วนของเจ้าหน้าที่รับสมัคร(ไม่ต้องกรอกข้อมูล)</b>
-          </p>
-          <Row>
-            <Input
-              label="วันที่รับสมัคร"
-              name="submit_d"
-              onChange={handleChange}
-            />
-            <Input label="เดือน" name="submit_m" onChange={handleChange} />
-            <Input label="พ.ศ." name="submit_y" onChange={handleChange} />
-          </Row>
-          <Row>
-            <Input
-              label="สถานที่รับสมัคร"
-              name="submit_place"
-              onChange={handleChange}
-            />
-            <Input
-              label="เจ้าหน้าที่ผู้รับสมัคร"
-              name="officer_name"
-              onChange={handleChange}
-            />
-            <Input
-              label="โทรศัพท์"
-              name="officer_tel"
-              onChange={handleChange}
-            />
-          </Row>
-
-
         </Section>
 
         <button type="submit" disabled={isSubmitting} style={btnS}>
