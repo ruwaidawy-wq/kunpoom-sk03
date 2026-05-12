@@ -668,7 +668,7 @@ options={[
             <Input
               label="5. ภาระหนี้สิน (ถ้ามี ให้ใส่เฉพาะตัวเลขและระบุเครื่องหมาย , ให้ครบถ้วน)"
               name="debt_amount"
-              type="number"
+              type="text"
               onChange={handleChange}
             />
           </Row>
