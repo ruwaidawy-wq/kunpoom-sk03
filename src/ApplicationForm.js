@@ -758,12 +758,6 @@ options={[
             <Input label="ตำแหน่ง" name="cert1_pos" onChange={handleChange} />
             <Input label="โทรศัพท์" name="cert1_tel" onChange={handleChange} />
           </Row>
-          <Input
-            label="ความเดือดร้อนคือ..."
-            name="cert1_detail"
-            onChange={handleChange}
-          />
-
           <p>
             <b>2. หนังสือรับรองจากโรงเรียน/สถานศึกษา</b>
           </p>
