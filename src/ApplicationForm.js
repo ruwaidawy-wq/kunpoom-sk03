@@ -328,10 +328,10 @@ options={[
             onChange={handleChange}
           />
           <Row>
-            <Input label="ชื่อบิดา" name="f_name" onChange={handleChange} />
+            <Input label="ชื่อบิดา(ระบุคำนำหน้า)" name="f_name" onChange={handleChange} />
             <Input label="นามสกุล" name="f_surname" onChange={handleChange} />
             <Input
-              label="รหัสประจำตัวประชาชน"
+              label="เลขบัตรประจำตัวประชาชน"
               name="f_id"
               onChange={handleChange}
             />
@@ -339,7 +339,7 @@ options={[
           <Row>
             <Input label="อาชีพ" name="f_job" onChange={handleChange} />
             <Input
-              label="รายได้เดือนละ"
+              label="รายได้เดือนละ(ใส่เฉพาะตัวเลขและระบุเครื่องหมาย , ให้ครบถ้วน)"
               name="f_income"
               onChange={handleChange}
             />
@@ -356,10 +356,10 @@ options={[
             onChange={handleChange}
           />
           <Row>
-            <Input label="ชื่อมารดา" name="m_name" onChange={handleChange} />
+            <Input label="ชื่อมารดา(ระบุคำนำหน้า)" name="m_name" onChange={handleChange} />
             <Input label="นามสกุล" name="m_surname" onChange={handleChange} />
             <Input
-              label="รหัสประจำตัวประชาชน"
+              label="เลขบัตรประจำตัวประชาชน"
               name="m_id"
               onChange={handleChange}
             />
@@ -367,7 +367,7 @@ options={[
           <Row>
             <Input label="อาชีพ" name="m_job" onChange={handleChange} />
             <Input
-              label="รายได้เดือนละ"
+              label="รายได้เดือนละ(ใส่เฉพาะตัวเลขและระบุเครื่องหมาย , ให้ครบถ้วน)"
               name="m_income"
               onChange={handleChange}
             />
@@ -666,7 +666,7 @@ options={[
               onChange={handleChange}
             />
             <Input
-              label="5. ภาระหนี้สิน (ถ้ามี ระบุจำนวนบาท)"
+              label="5. ภาระหนี้สิน (ถ้ามี ให้ใส่เฉพาะตัวเลขและระบุเครื่องหมาย , ให้ครบถ้วน)"
               name="debt_amount"
               type="number"
               onChange={handleChange}
