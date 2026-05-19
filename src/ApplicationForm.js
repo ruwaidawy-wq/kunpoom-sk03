@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
-// ⚠️ อย่าลืมแก้ URL ตรงนี้ให้เป็นของคุณ (Deploy แบบ Anyone)
 const scriptUrl = "https://script.google.com/macros/s/AKfycbxKtzjYWSkRVG47df9DEorwj3vXkpSIYQN_mbRYmYYr9es6pJ6VAr1YGJLmEcnfKIs7/exec";
 
 export default function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-const [videoFile, setVideoFile] = useState(null); // เพิ่มบรรทัดนี้เพื่อเก็บไฟล์วิดีโอ
+const [videoFile, setVideoFile] = useState(null);
  const [formData, setFormData] = useState({
     // --- ส่วนรับอีเมล ---
     applicantEmail: "",
@@ -130,7 +129,7 @@ const handleFileChange = (e) => {
     if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
-            setFormData({ ...formData, student_photo: reader.result }); // เก็บรูปในรูปแบบรหัส Base64
+            setFormData({ ...formData, student_photo: reader.result });
         };
         reader.readAsDataURL(file);
     }
@@ -158,7 +157,7 @@ const handleSubmit = async (e) => {
       });
       const photoResult = await photoRes.json();
       if (photoResult.status === "success") {
-        finalData.student_photo = photoResult.base64; // ✅ ได้ base64 กลับมาใช้ใน PDF
+        finalData.student_photo = photoResult.base64;
       } else {
         // ถ้าอัปโหลดรูปไม่สำเร็จ ให้ส่งต่อได้เลยโดยไม่มีรูป
         finalData.student_photo = "";
