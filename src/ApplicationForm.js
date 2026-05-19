@@ -214,7 +214,7 @@ const validateVideo = (event) => {
     video.onloadedmetadata = function() {
       window.URL.revokeObjectURL(video.src);
       const duration = video.duration; 
-      const maxDuration = 5 * 60; 
+      const maxDuration = 2 * 60; 
 
       if (duration > maxDuration) {
         if (errorElement) {
