@@ -842,14 +842,7 @@ options={[
   <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
     🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 5 นาที)
   </label>
-  
-  {/* บล็อกเล่นวิดีโอตัวเล็กของเก่าที่มีปัญหาการ์ตูน ถูกลบออกไปเรียบร้อยแล้วค่ะ */}
-  
-  {/* ช่องสำหรับให้ผู้สมัครกดเลือกไฟล์วิดีโอของตัวเองเพื่อแนบส่ง (โค้ด Input เดิมของคุณ) */}
-  <input 
-    type="file" 
-    accept="video/*" 
-    onChange={validateVideo}
+
   <input 
     type="file" 
     id="student_video" 
