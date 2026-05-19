@@ -30,9 +30,9 @@ export default async function handler(req, res) {
       return res.status(200).json(data);
     } catch {
       console.error("GAS response:", text.substring(0, 500));
-      return res.status(500).json({ 
-        status: "error", 
-        message: "GAS ตอบกลับผิดรูปแบบ: " + text.substring(0, 200) 
+      return res.status(500).json({
+        status: "error",
+        message: "GAS ตอบกลับผิดรูปแบบ: " + text.substring(0, 200),
       });
     }
   } catch (err) {
