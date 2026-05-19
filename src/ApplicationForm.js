@@ -845,7 +845,7 @@ options={[
   <div style={{ marginBottom: "12px", background: "#f9f9f9", padding: "10px", borderLeft: "4px solid #0275d8" }}>
     <small style={{ color: "#555", display: "block", marginBottom: "5px" }}>📺 วิดีโอตัวอย่างแนะนำการถ่ายคลิป:</small>
     <video width="100%" style={{ maxWidth: "400px", borderRadius: "4px" }} controls>
-      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+      <source src="https://drive.google.com/file/d/1VBMw-ilzqCCEqEMK2AuaGhCwsBN7xwVx/view?usp=sharing" type="video/mp4" />
       เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
     </video>
   </div>
