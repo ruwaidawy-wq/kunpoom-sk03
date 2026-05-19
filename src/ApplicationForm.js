@@ -136,18 +136,16 @@ const handleFileChange = (e) => {
     }
 };
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!window.confirm("ยืนยันการส่งข้อมูล?")) return;
-    setIsSubmitting(true);
-    const finalData = { ...formData };
-  
-  // รวมชื่อผู้รับรอง 1
+  e.preventDefault();
+  if (!window.confirm("ยืนยันการส่งข้อมูล?")) return;
+  setIsSubmitting(true);
+
+  const finalData = { ...formData };
   finalData.cert1_full = `${formData.cert1_name} ${formData.cert1_surname}`.trim();
-  // รวมชื่อผู้รับรอง 2
   finalData.cert2_full = `${formData.cert2_name} ${formData.cert2_surname}`.trim();
-  // รวมชื่อเจ้าหน้าที่
   finalData.officer_full = formData.officer_name;
-    let videoBase64 = "";
+
+  let videoBase64 = "";
   if (videoFile) {
     const reader = new FileReader();
     videoBase64 = await new Promise((resolve) => {
@@ -155,28 +153,34 @@ const handleFileChange = (e) => {
       reader.readAsDataURL(videoFile);
     });
   }
-try {
-    const res = await fetch(scriptUrl, {
+
+  try {
+    await fetch(scriptUrl, {
       method: "POST",
-      body: JSON.stringify({ 
-        action: "saveAndPrint", 
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({
+        action: "saveAndPrint",
         item: finalData,
-        videoBlob: videoBase64,                          // ส่งเนื้อข้อมูลวิดีโอไปหลังบ้าน
-        videoName: videoFile ? videoFile.name : ""      // ส่งชื่อไฟล์วิดีโอไปหลังบ้าน
-      }), 
+        videoBlob: videoBase64,
+        videoName: videoFile ? videoFile.name : "",
+      }),
     });
-      const result = await res.json();
-      if (result.status === "success") {
-        alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!");
-        window.open(result.url, "_blank");
-      } else alert("❌ เกิดข้อผิดพลาด: " + result.message);
-    } catch (err) {
-      alert(
-        "❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ ตรวจสอบ URL หรือการอนุญาตสิทธิ์"
-      );
-    }
-    setIsSubmitting(false);
-  };
+
+    // ✅ ไม่อ่าน res.json() เพราะ no-cors อ่านไม่ได้
+    alert(
+      "✅ ส่งข้อมูลสำเร็จแล้ว!\n" +
+      "ระบบกำลังสร้าง PDF และจะส่งไปยังอีเมล:\n" +
+      formData.applicantEmail + "\n\n" +
+      "กรุณารอสักครู่แล้วตรวจสอบอีเมลของท่านค่ะ"
+    );
+
+  } catch (err) {
+    alert("❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ ตรวจสอบ URL หรือการอนุญาตสิทธิ์");
+  }
+
+  setIsSubmitting(false);
+};
 const validateVideo = (event) => {
   const file = event.target.files[0];
   const errorElement = document.getElementById("video_error");
