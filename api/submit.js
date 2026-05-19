@@ -1,3 +1,12 @@
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+    responseLimit: false,
+  },
+};
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -10,24 +19,22 @@ export default async function handler(req, res) {
   try {
     const response = await fetch(GAS_URL, {
       method: "POST",
-      redirect: "follow", // ✅ เพิ่มบรรทัดนี้
+      redirect: "follow",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(req.body),
     });
 
-    // ✅ เช็คก่อนว่าได้ JSON จริงไหม
     const text = await response.text();
     try {
       const data = JSON.parse(text);
       return res.status(200).json(data);
     } catch {
-      console.error("GAS response is not JSON:", text.substring(0, 500));
+      console.error("GAS response:", text.substring(0, 500));
       return res.status(500).json({ 
         status: "error", 
         message: "GAS ตอบกลับผิดรูปแบบ: " + text.substring(0, 200) 
       });
     }
-
   } catch (err) {
     return res.status(500).json({ status: "error", message: err.toString() });
   }
