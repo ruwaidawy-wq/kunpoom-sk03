@@ -146,7 +146,26 @@ const handleSubmit = async (e) => {
   finalData.officer_full = formData.officer_name;
 
   try {
-    // --- ขั้นตอน 1: อัปโหลดวิดีโอก่อน (ถ้ามี) ---
+    // --- ขั้นตอน 1: อัปโหลดรูปภาพก่อน (ถ้ามี) ---
+    if (formData.student_photo) {
+      const photoRes = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "uploadPhoto",
+          photoBlob: formData.student_photo, // base64 รูปภาพ
+        }),
+      });
+      const photoResult = await photoRes.json();
+      if (photoResult.status === "success") {
+        finalData.student_photo = photoResult.base64; // ✅ ได้ base64 กลับมาใช้ใน PDF
+      } else {
+        // ถ้าอัปโหลดรูปไม่สำเร็จ ให้ส่งต่อได้เลยโดยไม่มีรูป
+        finalData.student_photo = "";
+      }
+    }
+
+    // --- ขั้นตอน 2: อัปโหลดวิดีโอ (ถ้ามี) ---
     if (videoFile) {
       alert("⏳ กำลังอัปโหลดวิดีโอ กรุณารอสักครู่...");
       const reader = new FileReader();
@@ -165,9 +184,8 @@ const handleSubmit = async (e) => {
         }),
       });
       const videoResult = await videoRes.json();
-
       if (videoResult.status === "success") {
-        finalData.video_url = videoResult.url; // ✅ เก็บ URL วิดีโอใส่ใน item
+        finalData.video_url = videoResult.url;
       } else {
         alert("⚠️ อัปโหลดวิดีโอไม่สำเร็จ: " + videoResult.message);
         setIsSubmitting(false);
@@ -177,7 +195,7 @@ const handleSubmit = async (e) => {
       finalData.video_url = "";
     }
 
-    // --- ขั้นตอน 2: ส่งข้อมูลฟอร์ม + สร้าง PDF ---
+    // --- ขั้นตอน 3: ส่งข้อมูลฟอร์ม + สร้าง PDF ---
     const res = await fetch("/api/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -201,6 +219,7 @@ const handleSubmit = async (e) => {
 
   setIsSubmitting(false);
 };
+  
 const validateVideo = (event) => {
   const file = event.target.files[0];
   const errorElement = document.getElementById("video_error");
