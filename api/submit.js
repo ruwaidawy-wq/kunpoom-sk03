@@ -1,22 +1,21 @@
-try {
-  const res = await fetch("/api/submit", {  // ✅ เรียก proxy แทน GAS โดยตรง
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "saveAndPrint",
-      item: finalData,
-      videoBlob: videoBase64,
-      videoName: videoFile ? videoFile.name : "",
-    }),
-  });
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  const result = await res.json();
-  if (result.status === "success") {
-    alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!\nระบบส่ง PDF ไปยังอีเมลของท่านแล้วค่ะ");
-    window.open(result.url, "_blank");  // ✅ เปิดไฟล์ได้เลย
-  } else {
-    alert("❌ เกิดข้อผิดพลาด: " + result.message);
+  if (req.method === "OPTIONS") return res.status(200).end();
+
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbxKtzjYWSkRVG47df9DEorwj3vXkpSIYQN_mbRYmYYr9es6pJ6VAr1YGJLmEcnfKIs7/exec";
+
+  try {
+    const response = await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (err) {
+    return res.status(500).json({ status: "error", message: err.toString() });
   }
-} catch (err) {
-  alert("❌ ไม่สามารถเชื่อมต่อได้: " + err.toString());
 }
