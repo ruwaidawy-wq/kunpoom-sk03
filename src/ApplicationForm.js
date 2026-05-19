@@ -135,7 +135,7 @@ const handleFileChange = (e) => {
         reader.readAsDataURL(file);
     }
 };
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   if (!window.confirm("ยืนยันการส่งข้อมูล?")) return;
   setIsSubmitting(true);
@@ -145,38 +145,58 @@ const handleFileChange = (e) => {
   finalData.cert2_full = `${formData.cert2_name} ${formData.cert2_surname}`.trim();
   finalData.officer_full = formData.officer_name;
 
-  let videoBase64 = "";
-  if (videoFile) {
-    const reader = new FileReader();
-    videoBase64 = await new Promise((resolve) => {
-      reader.onloadend = () => resolve(reader.result.split(",")[1]);
-      reader.readAsDataURL(videoFile);
-    });
-  }
-
   try {
-    await fetch(scriptUrl, {
+    // --- ขั้นตอน 1: อัปโหลดวิดีโอก่อน (ถ้ามี) ---
+    if (videoFile) {
+      alert("⏳ กำลังอัปโหลดวิดีโอ กรุณารอสักครู่...");
+      const reader = new FileReader();
+      const videoBase64 = await new Promise((resolve) => {
+        reader.onloadend = () => resolve(reader.result.split(",")[1]);
+        reader.readAsDataURL(videoFile);
+      });
+
+      const videoRes = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "uploadVideo",
+          videoBlob: videoBase64,
+          videoName: videoFile.name,
+        }),
+      });
+      const videoResult = await videoRes.json();
+
+      if (videoResult.status === "success") {
+        finalData.video_url = videoResult.url; // ✅ เก็บ URL วิดีโอใส่ใน item
+      } else {
+        alert("⚠️ อัปโหลดวิดีโอไม่สำเร็จ: " + videoResult.message);
+        setIsSubmitting(false);
+        return;
+      }
+    } else {
+      finalData.video_url = "";
+    }
+
+    // --- ขั้นตอน 2: ส่งข้อมูลฟอร์ม + สร้าง PDF ---
+    const res = await fetch("/api/submit", {
       method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action: "saveAndPrint",
         item: finalData,
-        videoBlob: videoBase64,
-        videoName: videoFile ? videoFile.name : "",
       }),
     });
 
-    // ✅ ไม่อ่าน res.json() เพราะ no-cors อ่านไม่ได้
-    alert(
-      "✅ ส่งข้อมูลสำเร็จแล้ว!\n" +
-      "ระบบกำลังสร้าง PDF และจะส่งไปยังอีเมล:\n" +
-      formData.applicantEmail + "\n\n" +
-      "กรุณารอสักครู่แล้วตรวจสอบอีเมลของท่านค่ะ"
-    );
+    const result = await res.json();
+    if (result.status === "success") {
+      alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!\nระบบส่ง PDF ไปยังอีเมลของท่านแล้วค่ะ หากไม่พบอีเมล์ กรุณาตรวจสอบในจดหมายขยะ");
+      window.open(result.url, "_blank");
+    } else {
+      alert("❌ เกิดข้อผิดพลาด: " + result.message);
+    }
 
   } catch (err) {
-    alert("❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ ตรวจสอบ URL หรือการอนุญาตสิทธิ์");
+    alert("❌ ไม่สามารถเชื่อมต่อได้: " + err.toString());
   }
 
   setIsSubmitting(false);
