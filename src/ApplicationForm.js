@@ -821,10 +821,10 @@ options={[
             <Input label="โทรศัพท์" name="cert2_tel" onChange={handleChange} />
           </Row>
         </Section>
-{/* --- บล็อกแสดงวิดีโอตัวอย่างก่อนแนบไฟล์ --- */}
+{/* --- บล็อกแสดงวิดีโอตัวอย่างก่อนแนบไฟล์ (เหลือเฉพาะจุดนี้จุดเดียวพอค่ะ) --- */}
 <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-  <p style={{ fontWeight: 'bold', color: '#555', marginBottom: '10px' }}>
-    🎬 วิดีโอตัวอย่างคำแนะนำในการแนบไฟล์ (กรุณาเปิดดูก่อนค่ะ):
+  <p style={{ fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>
+    🎬 วิดีโอตัวอย่างคำแนะนำในการแนบไฟล์และถ่ายคลิป (กรุณาเปิดดูก่อนค่ะ):
   </p>
   <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '6px' }}>
     <iframe
@@ -836,20 +836,20 @@ options={[
     ></iframe>
   </div>
 </div>
-{/* -------------------------------------- */}
+
+{/* --- ส่วนของช่องอัปโหลดไฟล์วิดีโอ --- */}
 <div className="form-group" style={{ marginBottom: "20px" }}>
   <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
     🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 5 นาที)
   </label>
   
-  <div style={{ marginBottom: "12px", background: "#f9f9f9", padding: "10px", borderLeft: "4px solid #0275d8" }}>
-    <small style={{ color: "#555", display: "block", marginBottom: "5px" }}>📺 วิดีโอตัวอย่างแนะนำการถ่ายคลิป:</small>
-    <video width="100%" style={{ maxWidth: "400px", borderRadius: "4px" }} controls>
-      <source src="https://drive.google.com/file/d/1VBMw-ilzqCCEqEMK2AuaGhCwsBN7xwVx/view?usp=sharing" type="video/mp4" />
-      เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
-    </video>
-  </div>
-
+  {/* บล็อกเล่นวิดีโอตัวเล็กของเก่าที่มีปัญหาการ์ตูน ถูกลบออกไปเรียบร้อยแล้วค่ะ */}
+  
+  {/* ช่องสำหรับให้ผู้สมัครกดเลือกไฟล์วิดีโอของตัวเองเพื่อแนบส่ง (โค้ด Input เดิมของคุณ) */}
+  <input 
+    type="file" 
+    accept="video/*" 
+    onChange={validateVideo}
   <input 
     type="file" 
     id="student_video" 
