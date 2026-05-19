@@ -218,7 +218,7 @@ const validateVideo = (event) => {
 
       if (duration > maxDuration) {
         if (errorElement) {
-          errorElement.innerText = "❌ วิดีโอมีความยาวเกิน 5 นาที กรุณาตัดต่อใหม่ให้อยู่ในเกณฑ์ที่กำหนดค่ะ";
+          errorElement.innerText = "❌ วิดีโอมีความยาวเกิน 2 นาที กรุณาตัดต่อใหม่ให้อยู่ในเกณฑ์ที่กำหนดค่ะ";
         }
         event.target.value = ""; 
         setVideoFile(null); // ถ้าเกินเวลา ไม่เก็บไฟล์
@@ -864,7 +864,7 @@ options={[
 {/* --- ส่วนของช่องอัปโหลดไฟล์วิดีโอ --- */}
 <div className="form-group" style={{ marginBottom: "20px" }}>
   <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
-    🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 5 นาที)
+    🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 2 นาที)
   </label>
 
   <input 
