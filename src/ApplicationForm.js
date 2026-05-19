@@ -147,10 +147,23 @@ const handleFileChange = (e) => {
   finalData.cert2_full = `${formData.cert2_name} ${formData.cert2_surname}`.trim();
   // รวมชื่อเจ้าหน้าที่
   finalData.officer_full = formData.officer_name;
+    let videoBase64 = "";
+  if (videoFile) {
+    const reader = new FileReader();
+    videoBase64 = await new Promise((resolve) => {
+      reader.onloadend = () => resolve(reader.result.split(",")[1]);
+      reader.readAsDataURL(videoFile);
+    });
+  }
 try {
     const res = await fetch(scriptUrl, {
       method: "POST",
-      body: JSON.stringify({ action: "saveAndPrint", item: finalData }), // ส่ง finalData แทน
+      body: JSON.stringify({ 
+        action: "saveAndPrint", 
+        item: finalData,
+        videoBlob: videoBase64,                          // ส่งเนื้อข้อมูลวิดีโอไปหลังบ้าน
+        videoName: videoFile ? videoFile.name : ""      // ส่งชื่อไฟล์วิดีโอไปหลังบ้าน
+      }), 
     });
       const result = await res.json();
       if (result.status === "success") {
@@ -808,7 +821,22 @@ options={[
             <Input label="โทรศัพท์" name="cert2_tel" onChange={handleChange} />
           </Row>
         </Section>
-{/* --- ส่วนรับไฟล์วิดีโอที่แก้ไขไวยากรณ์ React แล้ว --- */}
+{/* --- บล็อกแสดงวิดีโอตัวอย่างก่อนแนบไฟล์ --- */}
+<div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
+  <p style={{ fontWeight: 'bold', color: '#555', marginBottom: '10px' }}>
+    🎬 วิดีโอตัวอย่างคำแนะนำในการแนบไฟล์ (กรุณาเปิดดูก่อนค่ะ):
+  </p>
+  <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '6px' }}>
+    <iframe
+      src="https://drive.google.com/file/d/1VBMw-ilzqCCEqEMK2AuaGhCwsBN7xwVx/preview"
+      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+      allow="autoplay; encrypted-media"
+      allowFullScreen
+      title="วิดีโอตัวอย่างก่อนแนบไฟล์"
+    ></iframe>
+  </div>
+</div>
+{/* -------------------------------------- */}
 <div className="form-group" style={{ marginBottom: "20px" }}>
   <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
     🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 5 นาที)
