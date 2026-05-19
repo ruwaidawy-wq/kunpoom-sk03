@@ -753,13 +753,13 @@ options={[
 
           <h4>ลายมือชื่อ</h4>
           <Input
-            label="ชื่อผู้ยื่นคำร้อง (วงเล็บตัวบรรจง)"
+            label="ชื่อผู้ยื่นคำร้อง (ระบุคำนำหน้าเต็ม)"
             name="applicant_full_name"
             onChange={handleChange}
           />
           <Row>
             <Input
-              label="ชื่อผู้สอบข้อเท็จจริง"
+              label="ชื่อผู้สอบข้อเท็จจริง(ระบุคำนำหน้าเต็ม)"
               name="interviewer_full_name"
               onChange={handleChange}
             />
