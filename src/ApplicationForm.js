@@ -5,7 +5,7 @@ const scriptUrl = "https://script.google.com/macros/s/AKfycbxKtzjYWSkRVG47df9DEo
 
 export default function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+const [videoFile, setVideoFile] = useState(null); // เพิ่มบรรทัดนี้เพื่อเก็บไฟล์วิดีโอ
  const [formData, setFormData] = useState({
     // --- ส่วนรับอีเมล ---
     applicantEmail: "",
@@ -164,7 +164,35 @@ try {
     }
     setIsSubmitting(false);
   };
+const validateVideo = (event) => {
+  const file = event.target.files[0];
+  const errorElement = document.getElementById("video_error");
+  
+  if (errorElement) errorElement.innerText = ""; 
 
+  if (file) {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+
+    video.onloadedmetadata = function() {
+      window.URL.revokeObjectURL(video.src);
+      const duration = video.duration; 
+      const maxDuration = 5 * 60; 
+
+      if (duration > maxDuration) {
+        if (errorElement) {
+          errorElement.innerText = "❌ วิดีโอมีความยาวเกิน 5 นาที กรุณาตัดต่อใหม่ให้อยู่ในเกณฑ์ที่กำหนดค่ะ";
+        }
+        event.target.value = ""; 
+        setVideoFile(null); // ถ้าเกินเวลา ไม่เก็บไฟล์
+      } else {
+        setVideoFile(file); // ถ้าผ่านเกณฑ์ ให้เก็บไฟล์นี้ไว้เตรียมส่ง
+      }
+    };
+
+    video.src = URL.createObjectURL(file);
+  }
+};
   return (
     <div
       style={{
@@ -780,7 +808,30 @@ options={[
             <Input label="โทรศัพท์" name="cert2_tel" onChange={handleChange} />
           </Row>
         </Section>
+{/* --- ส่วนรับไฟล์วิดีโอที่แก้ไขไวยากรณ์ React แล้ว --- */}
+<div className="form-group" style={{ marginBottom: "20px" }}>
+  <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
+    🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 5 นาที)
+  </label>
+  
+  <div style={{ marginBottom: "12px", background: "#f9f9f9", padding: "10px", borderLeft: "4px solid #0275d8" }}>
+    <small style={{ color: "#555", display: "block", marginBottom: "5px" }}>📺 วิดีโอตัวอย่างแนะนำการถ่ายคลิป:</small>
+    <video width="100%" style={{ maxWidth: "400px", borderRadius: "4px" }} controls>
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+      เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+    </video>
+  </div>
 
+  <input 
+    type="file" 
+    id="student_video" 
+    accept="video/*" 
+    className="form-control" 
+    onChange={validateVideo} 
+    style={inputS}
+  />
+  <small style={{ color: "red", display: "block", marginTop: "5px" }} id="video_error"></small>
+</div>
         <button type="submit" disabled={isSubmitting} style={btnS}>
           {isSubmitting ? "⏳ กำลังประมวลผล..." : "ส่งข้อมูลและสร้าง PDF ➔"}
         </button>
