@@ -156,7 +156,7 @@ const handleSubmit = async (e) => {
       method: "POST",
       mode: "no-cors", // 💡 เปิดโหมดปล่อยผ่าน ไม่สนใจการบล็อกสิทธิ์ข้ามเว็บของเบราว์เซอร์
       headers: { 
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "text/plain" 
       },
       body: JSON.stringify(payload)
     });
