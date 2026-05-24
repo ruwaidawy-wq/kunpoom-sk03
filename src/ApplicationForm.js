@@ -145,75 +145,58 @@ const handleSubmit = async (e) => {
   finalData.officer_full = formData.officer_name;
 
   try {
-    // --- ขั้นตอน 1: อัปโหลดรูปภาพก่อน (ถ้ามี) ---
-    if (formData.student_photo) {
-      const photoRes = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "uploadPhoto",
-          photoBlob: formData.student_photo, // base64 รูปภาพ
-        }),
-      });
-      const photoResult = await photoRes.json();
-      if (photoResult.status === "success") {
-        finalData.student_photo = photoResult.base64;
-      } else {
-        // ถ้าอัปโหลดรูปไม่สำเร็จ ให้ส่งต่อได้เลยโดยไม่มีรูป
-        finalData.student_photo = "";
-      }
-    }
-
-    // --- ขั้นตอน 2: อัปโหลดวิดีโอ (ถ้ามี) ---
+    // 🎥 ขั้นตอนที่ 1: แปลงวิดีโอเป็น Base64 แบบปลอดภัย (รองรับ iPhone/มือถือทุกรุ่น)
+    let videoBase64 = "";
     if (videoFile) {
-      alert("⏳ กำลังอัปโหลดวิดีโอ กรุณารอสักครู่...  กรุณากดตกลงแล้วรอรับ E-mail หากไม่พบE-mail โปรดตรวจสอบจดหมายขยะ");
+      alert("⏳ กำลังอัปโหลดวิดีโอและบันทึกข้อมูล กรุณารอสักครู่...\nกรุณากดตกลงแล้วรอรับ E-mail หากไม่พบ E-mail โปรดตรวจสอบในจดหมายขยะ");
+      
       const reader = new FileReader();
-      const videoBase64 = await new Promise((resolve) => {
-        reader.onloadend = () => resolve(reader.result.split(",")[1]);
+      videoBase64 = await new Promise((resolve, reject) => {
+        reader.onload = () => {
+          // ใช้ indexOf เพื่อตัดข้อมูลหลังเครื่องหมายจุลภาคอย่างแม่นยำ ป้องกันข้อผิดพลาดสติงก์บนสมาร์ตโฟน
+          const commaIndex = reader.result.indexOf(',');
+          if (commaIndex !== -1) {
+            resolve(reader.result.substring(commaIndex + 1));
+          } else {
+            reject(new Error("รูปแบบไฟล์วิดีโอไม่ถูกต้อง"));
+          }
+        };
+        reader.onerror = (error) => reject(error);
         reader.readAsDataURL(videoFile);
       });
-
-      const videoRes = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "uploadVideo",
-          videoBlob: videoBase64,
-          videoName: videoFile.name,
-        }),
-      });
-      const videoResult = await videoRes.json();
-      if (videoResult.status === "success") {
-        finalData.video_url = videoResult.url;
-      } else {
-        alert("⚠️ อัปโหลดวิดีโอไม่สำเร็จ: " + videoResult.message);
-        setIsSubmitting(false);
-        return;
-      }
-    } else {
-      finalData.video_url = "";
     }
 
-    // --- ขั้นตอน 3: ส่งข้อมูลฟอร์ม + สร้าง PDF ---
+    // 📸 ขั้นตอนที่ 2: จัดการรูปภาพ (ใช้ Base64 ส่งไปพร้อมก้อนใหญ่เลย ไม่ต้องแยกยิงแล้ว)
+    if (formData.student_photo) {
+      finalData.student_photo = formData.student_photo;
+    }
+
+    // 🚀 ขั้นตอนที่ 3: ยิง Fetch ครั้งเดียวมัดรวมส่งไปที่หลังบ้าน (GAS)
+    // หมายเหตุ: เปลี่ยนลิงก์ "/api/submit" เป็นลิงก์ URL เว็บแอปของ GAS ของคุณได้โดยตรงเพื่อความเสถียรค่ะ
     const res = await fetch("/api/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        action: "saveAndPrint",
+        action: "saveAndPrint", // สั่งให้สคริปต์หลังบ้านทำงานตรงตัว
         item: finalData,
+        videoBlob: videoBase64,                    // แนบเนื้อไฟล์วิดีโอไปพร้อมกัน
+        videoName: videoFile ? videoFile.name : "" // แนบนามสกุลไฟล์จริง (.mp4 / .mov) ไปให้หลังบ้านจัดแจง
       }),
     });
 
     const result = await res.json();
+    
     if (result.status === "success") {
       alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!\nระบบส่ง PDF ไปยังอีเมลของท่านแล้วค่ะ หากไม่พบอีเมล์ กรุณาตรวจสอบในจดหมายขยะ");
-      window.open(result.url, "_blank");
+      if (result.url) {
+        window.open(result.url, "_blank");
+      }
     } else {
-      alert("❌ เกิดข้อผิดพลาด: " + result.message);
+      alert("❌ เกิดข้อผิดพลาดจากระบบหลังบ้าน: " + result.message);
     }
 
   } catch (err) {
-    alert("❌ ไม่สามารถเชื่อมต่อได้: " + err.toString());
+    alert("❌ ไม่สามารถเชื่อมต่อหรืออัปโหลดสำเร็จ: " + err.toString());
   }
 
   setIsSubmitting(false);
