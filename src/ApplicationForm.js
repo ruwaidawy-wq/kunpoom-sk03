@@ -166,7 +166,7 @@ const handleSubmit = async (e) => {
 
     // --- ขั้นตอน 2: อัปโหลดวิดีโอ (ถ้ามี) ---
     if (videoFile) {
-      alert("⏳ กำลังอัปโหลดวิดีโอ กรุณารอสักครู่...");
+      alert("⏳ กำลังอัปโหลดวิดีโอ กรุณารอสักครู่...  กรุณากดตกลงแล้วรอรับ E-mail หากไม่พบE-mail โปรดตรวจสอบจดหมายขยะ");
       const reader = new FileReader();
       const videoBase64 = await new Promise((resolve) => {
         reader.onloadend = () => resolve(reader.result.split(",")[1]);
