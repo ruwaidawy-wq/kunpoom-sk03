@@ -145,43 +145,18 @@ const handleSubmit = async (e) => {
   finalData.officer_full = formData.officer_name;
 
   try {
-    // 🎥 ขั้นตอนที่ 1: แปลงวิดีโอเป็น Base64 แบบปลอดภัย (รองรับ iPhone/มือถือทุกรุ่น)
-    let videoBase64 = "";
-    if (videoFile) {
-      alert("⏳ กำลังอัปโหลดวิดีโอและบันทึกข้อมูล กรุณารอสักครู่...\nกรุณากดตกลงแล้วรอรับ E-mail หากไม่พบ E-mail โปรดตรวจสอบในจดหมายขยะ");
-      
-      const reader = new FileReader();
-      videoBase64 = await new Promise((resolve, reject) => {
-        reader.onload = () => {
-          // ใช้ indexOf เพื่อตัดข้อมูลหลังเครื่องหมายจุลภาคอย่างแม่นยำ ป้องกันข้อผิดพลาดสติงก์บนสมาร์ตโฟน
-          const commaIndex = reader.result.indexOf(',');
-          if (commaIndex !== -1) {
-            resolve(reader.result.substring(commaIndex + 1));
-          } else {
-            reject(new Error("รูปแบบไฟล์วิดีโอไม่ถูกต้อง"));
-          }
-        };
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(videoFile);
-      });
-    }
-
-    // 📸 ขั้นตอนที่ 2: จัดการรูปภาพ (ใช้ Base64 ส่งไปพร้อมก้อนใหญ่เลย ไม่ต้องแยกยิงแล้ว)
+    // 📸 ส่งข้อมูลมัดรวมกับรูปภาพเด็ก (รูปภาพเป็น Base64 ขนาดเล็ก ส่งได้สบายมากค่ะ)
     if (formData.student_photo) {
       finalData.student_photo = formData.student_photo;
     }
 
-    // 🚀 ขั้นตอนที่ 3: ยิง Fetch ครั้งเดียวมัดรวมส่งไปที่หลังบ้าน (GAS)
-    // หมายเหตุ: เปลี่ยนลิงก์ "/api/submit" เป็นลิงก์ URL เว็บแอปของ GAS ของคุณได้โดยตรงเพื่อความเสถียรค่ะ
-//  แก้ไขให้เป็นแบบนี้ค่ะ
-const res = await fetch(scriptUrl, {
-  method: "POST",
+    // 🚀 ยิง Fetch ตรงไปที่ GAS หลังบ้าน
+    const res = await fetch(scriptUrl, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        action: "saveAndPrint", // สั่งให้สคริปต์หลังบ้านทำงานตรงตัว
-        item: finalData,
-        videoBlob: videoBase64,                    // แนบเนื้อไฟล์วิดีโอไปพร้อมกัน
-        videoName: videoFile ? videoFile.name : "" // แนบนามสกุลไฟล์จริง (.mp4 / .mov) ไปให้หลังบ้านจัดแจง
+        action: "saveAndPrint", 
+        item: finalData
       }),
     });
 
@@ -189,15 +164,13 @@ const res = await fetch(scriptUrl, {
     
     if (result.status === "success") {
       alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!\nระบบส่ง PDF ไปยังอีเมลของท่านแล้วค่ะ หากไม่พบอีเมล์ กรุณาตรวจสอบในจดหมายขยะ");
-      if (result.url) {
-        window.open(result.url, "_blank");
-      }
+      if (result.url) window.open(result.url, "_blank");
     } else {
       alert("❌ เกิดข้อผิดพลาดจากระบบหลังบ้าน: " + result.message);
     }
 
   } catch (err) {
-    alert("❌ ไม่สามารถเชื่อมต่อหรืออัปโหลดสำเร็จ: " + err.toString());
+    alert("❌ ไม่สามารถเชื่อมต่อสำเร็จ: " + err.toString());
   }
 
   setIsSubmitting(false);
