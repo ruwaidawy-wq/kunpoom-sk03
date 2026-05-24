@@ -840,7 +840,7 @@ options={[
 {/* --- ส่วนของช่องแนบลิงก์วิดีโอแทนการอัปโหลดไฟล์ --- */}
 <div style={{ marginBottom: "20px" }}>
   <Input 
-    label="🎥 ลิงก์วิดีโอแนะนำตัว (เช่น ลิงก์ Google Drive, YouTube หรือ TikTok ที่เปิดสาธารณะแล้ว)" 
+    label="🎥 ลิงก์วิดีโอแนะนำตัว (เช่น ลิงก์ Google Drive, YouTube ที่เปิดสาธารณะแล้ว)" 
     name="video_url" 
     placeholder="https://drive.google.com/..."
     onChange={handleChange} 
