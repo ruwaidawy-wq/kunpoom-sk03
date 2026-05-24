@@ -173,8 +173,9 @@ const handleSubmit = async (e) => {
 
     // 🚀 ขั้นตอนที่ 3: ยิง Fetch ครั้งเดียวมัดรวมส่งไปที่หลังบ้าน (GAS)
     // หมายเหตุ: เปลี่ยนลิงก์ "/api/submit" เป็นลิงก์ URL เว็บแอปของ GAS ของคุณได้โดยตรงเพื่อความเสถียรค่ะ
-    const res = await fetch("/api/submit", {
-      method: "POST",
+//  แก้ไขให้เป็นแบบนี้ค่ะ
+const res = await fetch(scriptUrl, {
+  method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action: "saveAndPrint", // สั่งให้สคริปต์หลังบ้านทำงานตรงตัว
