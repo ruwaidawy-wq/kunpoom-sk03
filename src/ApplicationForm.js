@@ -866,7 +866,7 @@ options={[
 {/* --- บล็อกแสดงวิดีโอตัวอย่างก่อนแนบไฟล์ (เหลือเฉพาะจุดนี้จุดเดียวพอค่ะ) --- */}
 <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
   <p style={{ fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>
-    🎬 วิดีโอตัวอย่างคำแนะนำในการแนบไฟล์และถ่ายคลิป (กรุณาเปิดดูก่อนค่ะ):
+    🎬 วิดีโอตัวอย่างคำแนะนำในการแนบไฟล์และถ่ายคลิป (กรุณาเปิดเพื่อทำความเข้าใจในการบันทึกวิดีโอแนบค่ะ):
   </p>
   <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '6px' }}>
     <iframe
