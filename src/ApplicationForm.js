@@ -837,20 +837,15 @@ options={[
 </div>
 
 {/* --- ส่วนของช่องอัปโหลดไฟล์วิดีโอ --- */}
-<div className="form-group" style={{ marginBottom: "20px" }}>
-  <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
-    🎥 วิดีโอแนะนำตัวและแสดงความประสงค์ขอรับทุนการศึกษา (ความยาวไม่เกิน 2 นาที)
-  </label>
-
-  <input 
-    type="file" 
-    id="student_video" 
-    accept="video/*" 
-    className="form-control" 
-    onChange={validateVideo} 
-    style={inputS}
+{/* --- ส่วนของช่องแนบลิงก์วิดีโอแทนการอัปโหลดไฟล์ --- */}
+<div style={{ marginBottom: "20px" }}>
+  <Input 
+    label="🎥 ลิงก์วิดีโอแนะนำตัว (เช่น ลิงก์ Google Drive, YouTube หรือ TikTok ที่เปิดสาธารณะแล้ว)" 
+    name="video_url" 
+    placeholder="https://drive.google.com/..."
+    onChange={handleChange} 
+    required
   />
-  <small style={{ color: "red", display: "block", marginTop: "5px" }} id="video_error"></small>
 </div>
         <button type="submit" disabled={isSubmitting} style={btnS}>
           {isSubmitting ? "⏳ กำลังประมวลผล..." : "ส่งข้อมูลและสร้าง PDF ➔"}
