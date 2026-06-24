@@ -5,6 +5,9 @@ const scriptUrl = "https://script.google.com/macros/s/AKfycbxKtzjYWSkRVG47df9DEo
 export default function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 const [videoFile, setVideoFile] = useState(null);
+const [videoFile, setVideoFile] = useState(null);
+const [sidWarning, setSidWarning] = useState("");
+const [checkingSid, setCheckingSid] = useState(false);
  const [formData, setFormData] = useState({
     // --- ส่วนรับอีเมล ---
     applicantEmail: "",
@@ -114,8 +117,15 @@ teacher_tel: "",
     // --- แผนที่ ---
     home_map: "",
 });
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData({ ...formData, [name]: value });
+
+  // ✅ เช็คซ้ำทันทีเมื่อกรอกเลขบัตรประชาชนครบ 13 หลัก
+  if (name === "sid") {
+    checkSidDuplicate(value);
+  }
+};
 
   const handleCheckbox = (e) => {
     const { name, value, checked } = e.target;
@@ -134,9 +144,36 @@ const handleFileChange = (e) => {
         reader.readAsDataURL(file);
     }
 };
+
+  const checkSidDuplicate = async (sid) => {
+  if (!sid || sid.length !== 13) {
+    setSidWarning("");
+    return;
+  }
+  setCheckingSid(true);
+  try {
+    const res = await fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "checkSid", sid }),
+    });
+    const result = await res.json();
+    if (result.isDuplicate) {
+      setSidWarning("⚠️ เลขบัตรประชาชนนี้มีการสมัครในระบบแล้ว กรุณาติดต่อครูธัญวลัย 0805393980 เพื่อตรวจสอบ");
+    } else {
+      setSidWarning("");
+    }
+  } catch (err) {
+    console.error("เช็คเลขบัตรซ้ำไม่สำเร็จ:", err);
+  }
+  setCheckingSid(false);
+};
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+if (sidWarning) {
+  alert("⚠️ ไม่สามารถส่งใบสมัครได้ เนื่องจาก " + sidWarning);
+  return;
+}
   // --- ตรวจสอบช่องที่ HTML required ตรวจให้ไม่ได้ ---
   if (!formData.student_photo) {
     alert("⚠️ กรุณาแนบรูปภาพนักเรียน (ส่วนที่ 1)");
@@ -316,14 +353,32 @@ options={[
             <Input label="อายุ (ปี)" name="age" onChange={handleChange} />
           </Row>
           <Row>
-            <Input
-              label="รหัสประจำตัวประชาชน"
-              name="sid"
-              maxLength="13"
-              onChange={handleChange}
-              required
-            />
-          </Row>
+  <Input
+    label="รหัสประจำตัวประชาชน"
+    name="sid"
+    maxLength="13"
+    onChange={handleChange}
+    required
+  />
+</Row>
+{checkingSid && (
+  <p style={{ color: "#888", fontSize: "13px" }}>🔍 กำลังตรวจสอบ...</p>
+)}
+{sidWarning && (
+  <div
+    style={{
+      padding: "10px",
+      backgroundColor: "#fff3cd",
+      border: "1px solid #ffc107",
+      borderRadius: "6px",
+      color: "#856404",
+      fontSize: "14px",
+      marginBottom: "10px",
+    }}
+  >
+    {sidWarning}
+  </div>
+)}
 
           <h4>1.2 สถานศึกษา</h4>
           <Row>
