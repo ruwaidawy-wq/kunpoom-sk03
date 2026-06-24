@@ -137,7 +137,7 @@ const handleFileChange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  // --- ตรวจสอบช่องที่ HTML required ตรวจให้ไม่ได้ (กลุ่ม checkbox / รูปภาพ / เงื่อนไขพิเศษ) ---
+  // --- ตรวจสอบช่องที่ HTML required ตรวจให้ไม่ได้ ---
   if (!formData.student_photo) {
     alert("⚠️ กรุณาแนบรูปภาพนักเรียน (ส่วนที่ 1)");
     return;
@@ -166,27 +166,29 @@ const handleSubmit = async (e) => {
   finalData.cert1_full = `${formData.cert1_name || ""} ${formData.cert1_surname || ""}`.trim();
   finalData.cert2_full = `${formData.cert2_name || ""} ${formData.cert2_surname || ""}`.trim();
   finalData.officer_full = formData.officer_name || "";
-  finalData.video_url = formData.video_url || ""; 
+  finalData.video_url = formData.video_url || "";
 
   try {
-    const payload = {
-      action: "saveAndPrint", 
-      item: finalData
-    };
-
-    // 🚀 ส่งข้อมูลในรูปแบบจำลอง Form ซึ่งเป็นท่าที่ทะลุ CORS ของ Google ได้ดีที่สุด
-    const res = await fetch(scriptUrl, {
+    // ✅ เรียกผ่าน Proxy /api/submit เพื่อให้อ่าน response จริงได้
+    const res = await fetch("/api/submit", {
       method: "POST",
-      mode: "no-cors", // 💡 เปิดโหมดปล่อยผ่าน ไม่สนใจการบล็อกสิทธิ์ข้ามเว็บของเบราว์เซอร์
-      headers: { 
-        "Content-Type": "text/plain" 
-      },
-      body: JSON.stringify(payload)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "saveAndPrint",
+        item: finalData,
+      }),
     });
 
-    // เนื่องจากใช้โหมด no-cors เบราว์เซอร์จะไม่ยอมให้อ่านค่าจาก res.json() ตรง ๆ (จะเด้งไป catch ทันที)
-    // แต่ข้อมูลจะวิ่งเข้า Google Sheets และสร้าง PDF หลังบ้านเรียบร้อย 100% แน่นอนค่ะ!
-    alert("⏳ ส่งข้อมูลใบสมัครเรียบร้อยแล้ว!\nระบบกำลังบันทึกลงฐานข้อมูลและสร้างไฟล์ PDF ส่งไปยังอีเมลของคุณ (กรุณาเช็กกล่องข้อความหรืออีเมลขยะใน 1-2 นาทีนะคะ)");
+    const result = await res.json();
+
+    if (result.status === "success") {
+      alert("✅ บันทึกข้อมูลและสร้าง PDF สำเร็จแล้ว!\nระบบส่ง PDF ไปยังอีเมลของท่านแล้วค่ะ หากไม่พบอีเมล์ กรุณาตรวจสอบในจดหมายขยะ");
+      window.open(result.url, "_blank");
+    } else if (result.status === "duplicate") {
+      alert("⚠️ " + result.message);
+    } else {
+      alert("❌ เกิดข้อผิดพลาด: " + result.message);
+    }
 
   } catch (err) {
     console.error("Error:", err);
