@@ -116,15 +116,39 @@ teacher_tel: "",
     // --- แผนที่ ---
     home_map: "",
 });
-  const handleChange = (e) => {
-  const { name, value } = e.target;
-  setFormData({ ...formData, [name]: value });
+ const checkSidDuplicate = async (sid) => {
+    if (!sid || sid.length !== 13) {
+      setSidWarning("");
+      return;
+    }
+    setCheckingSid(true);
+    try {
+      const res = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "checkSid", sid }),
+      });
+      const result = await res.json();
+      if (result.isDuplicate) {
+        setSidWarning("⚠️ เลขบัตรประชาชนนี้มีการสมัครในระบบแล้ว กรุณาติดต่อครูธัญวลัย 0805393980 เพื่อตรวจสอบ");
+      } else {
+        setSidWarning("");
+      }
+    } catch (err) {
+      console.error("เช็คเลขบัตรซ้ำไม่สำเร็จ:", err);
+    }
+    setCheckingSid(false);
+  };
 
-  // ✅ เช็คซ้ำทันทีเมื่อกรอกเลขบัตรประชาชนครบ 13 หลัก
-  if (name === "sid") {
-    checkSidDuplicate(value);
-  }
-};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // ✅ เช็คซ้ำทันทีเมื่อกรอกเลขบัตรประชาชนครบ 13 หลัก
+    if (name === "sid") {
+      checkSidDuplicate(value);
+    }
+  };
 
   const handleCheckbox = (e) => {
     const { name, value, checked } = e.target;
@@ -133,40 +157,17 @@ teacher_tel: "",
     else newArray = newArray.filter((item) => item !== value);
     setFormData({ ...formData, [name]: newArray });
   };
-const handleFileChange = (e) => {
+
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFormData({ ...formData, student_photo: reader.result });
-        };
-        reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, student_photo: reader.result });
+      };
+      reader.readAsDataURL(file);
     }
-};
-
-  const checkSidDuplicate = async (sid) => {
-  if (!sid || sid.length !== 13) {
-    setSidWarning("");
-    return;
-  }
-  setCheckingSid(true);
-  try {
-    const res = await fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "checkSid", sid }),
-    });
-    const result = await res.json();
-    if (result.isDuplicate) {
-      setSidWarning("⚠️ เลขบัตรประชาชนนี้มีการสมัครในระบบแล้ว กรุณาติดต่อครูธัญวลัย 0805393980 เพื่อตรวจสอบ");
-    } else {
-      setSidWarning("");
-    }
-  } catch (err) {
-    console.error("เช็คเลขบัตรซ้ำไม่สำเร็จ:", err);
-  }
-  setCheckingSid(false);
-};
+  };
 const handleSubmit = async (e) => {
   e.preventDefault();
 if (sidWarning) {
